@@ -17,7 +17,7 @@ def convert_if_hex(source_string: str) -> str:
 
 
 def normalize_hex(hex_string: str) -> str:
-    return f'|{hex(int("0x" + hex_string.replace("|", ""), 0)).upper().replace("0X", "")}'
+    return f'{hex(int("0x" + hex_string.replace("|", ""), 0)).upper().replace("0X", "")}'
 
 
 def main() -> None:
@@ -57,9 +57,9 @@ def main() -> None:
 
             for line in lines:
                 # normalize if the word is hex
-                words = map(convert_if_hex, f'|{line}|'.split())
+                words = map(convert_if_hex, line.split())
 
-                text = '|'.join(words)
+                text = f'|{"|".join(words)}|'
                 output_file.write(f'{text}\n')
 
     print(f'output: "{output_path}"')
