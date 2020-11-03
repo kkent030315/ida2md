@@ -1,4 +1,17 @@
 import os
+import re
+
+
+def is_hex(source_string) -> bool:
+    try:
+        int(source_string, 16)
+        return True
+    except ValueError:
+        return False
+
+
+def convert_if_hex(source_string) -> str:
+    return normalize_hex(source_string) if is_hex(source_string) else source_string
 
 
 def normalize_hex(hex_string) -> str:
@@ -41,10 +54,7 @@ def main() -> None:
             output_file.write(f'|{md_header_separator}|\n')
 
             for line in lines:
-                words = f'|{line}|'.split()
-
-                # convert address to the minimum length
-                words[0] = normalize_hex(words[0])
+                words = map(convert_if_hex, f'|{line}|'.split())
 
                 text = '|'.join(words)
                 output_file.write(f'{text}\n')
