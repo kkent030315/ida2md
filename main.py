@@ -1,8 +1,10 @@
 import os
 import re
 
+IDA2MD_ENCODING = 'utf-8'
 
-def is_hex(source_string) -> bool:
+
+def is_hex(source_string: str) -> bool:
     try:
         int(source_string, 16)
         return True
@@ -10,11 +12,11 @@ def is_hex(source_string) -> bool:
         return False
 
 
-def convert_if_hex(source_string) -> str:
+def convert_if_hex(source_string: str) -> str:
     return normalize_hex(source_string) if is_hex(source_string) else source_string
 
 
-def normalize_hex(hex_string) -> str:
+def normalize_hex(hex_string: str) -> str:
     return f'|{hex(int("0x" + hex_string.replace("|", ""), 0)).upper().replace("0X", "")}'
 
 
@@ -27,7 +29,7 @@ def main() -> None:
     if not os.path.exists(path=file_path):
         raise Exception(f'The specified file "{file_path}" does not exists.')
 
-    with open(file_path, encoding='utf-8') as input_file:
+    with open(file_path, encoding=IDA2MD_ENCODING) as input_file:
         # copy all of lines from the input file, this is not good for bigger files
         # considering improvements
         lines = list(map(str.strip, input_file.readlines()))
@@ -48,12 +50,13 @@ def main() -> None:
             print(f'the output file {output_filename} already exists, opening new one')
             access_mode = 'w'
 
-        with open(output_path, access_mode, encoding='utf-8') as output_file:
+        with open(output_path, access_mode, encoding=IDA2MD_ENCODING) as output_file:
             # markdown table header
             output_file.write(f'|{md_header}|\n')
             output_file.write(f'|{md_header_separator}|\n')
 
             for line in lines:
+                # normalize if the word is hex
                 words = map(convert_if_hex, f'|{line}|'.split())
 
                 text = '|'.join(words)
