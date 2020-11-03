@@ -23,3 +23,8 @@ Output (Markdown table style):
 |180077750|AddConsoleAliasA|api-ms-win-core-console-l3-2-0|
 ...
 ```
+
+# Known Issues
+
+- the item in a row must not be contain whitespace.
+  - it is not possible to detect if the item is word or not automatically it should take action manually
